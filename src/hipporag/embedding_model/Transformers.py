@@ -18,7 +18,11 @@ class TransformersEmbeddingModel(BaseEmbeddingModel):
     def __init__(self, global_config:BaseConfig, embedding_model_name:str) -> None:
         super().__init__(global_config=global_config)
 
-        self.model_id = embedding_model_name[len("Transformers/"):]
+        # Accept both prefixed ("Transformers/<repo>") and bare HF repo IDs (e.g., "BAAI/bge-m3")
+        if embedding_model_name.startswith("Transformers/"):
+            self.model_id = embedding_model_name[len("Transformers/"):]
+        else:
+            self.model_id = embedding_model_name
         self.embedding_type = 'float'
         # use global config for batch size if set
         try:
@@ -53,6 +57,7 @@ class TransformersEmbeddingModel(BaseEmbeddingModel):
         
         results = []
         batch_indexes = list(range(0, len(texts), self.batch_size))
-        for i in tqdm(batch_indexes, desc="Batch Encoding"):
+        disable_bar = len(batch_indexes) <= 1
+        for i in tqdm(batch_indexes, desc="Batch Encoding", disable=disable_bar, mininterval=0.5):
             results.append(self.encode(texts[i:i + self.batch_size]))
         return np.concatenate(results)

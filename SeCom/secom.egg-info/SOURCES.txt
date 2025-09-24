@@ -1,0 +1,17 @@
+LICENSE
+README.md
+setup.py
+./secom/__init__.py
+./secom/secom.py
+./secom/utils.py
+./secom/version.py
+secom/__init__.py
+secom/secom.py
+secom/utils.py
+secom/version.py
+secom.egg-info/PKG-INFO
+secom.egg-info/SOURCES.txt
+secom.egg-info/dependency_links.txt
+secom.egg-info/not-zip-safe
+secom.egg-info/requires.txt
+secom.egg-info/top_level.txt

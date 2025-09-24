@@ -128,9 +128,15 @@ class OpenIE:
         )
 
     def openie(self, chunk_key: str, passage: str) -> Dict[str, Any]:
-        ner_output = self.ner(chunk_key=chunk_key, passage=passage)
-        triple_output = self.triple_extraction(chunk_key=chunk_key, passage=passage, named_entities=ner_output.unique_entities)
-        return {"ner": ner_output, "triplets": triple_output}
+        # Skip NER: directly extract triples; provide empty NER payload for compatibility
+        empty_ner = NerRawOutput(
+            chunk_id=chunk_key,
+            response="",
+            unique_entities=[],
+            metadata={}
+        )
+        triple_output = self.triple_extraction(chunk_key=chunk_key, passage=passage, named_entities=[])
+        return {"ner": empty_ner, "triplets": triple_output}
 
     def batch_openie(self, chunks: Dict[str, ChunkInfo]) -> Tuple[Dict[str, NerRawOutput], Dict[str, TripleRawOutput]]:
         """
@@ -149,34 +155,16 @@ class OpenIE:
         # Extract passages from the provided chunks
         chunk_passages = {chunk_key: chunk["content"] for chunk_key, chunk in chunks.items()}
 
-        ner_results_list = []
-        total_prompt_tokens = 0
-        total_completion_tokens = 0
-        num_cache_hit = 0
-
-        with ThreadPoolExecutor() as executor:
-            # Create NER futures for each chunk
-            ner_futures = {
-                executor.submit(self.ner, chunk_key, passage): chunk_key
-                for chunk_key, passage in chunk_passages.items()
-            }
-
-            pbar = tqdm(as_completed(ner_futures), total=len(ner_futures), desc="NER")
-            for future in pbar:
-                result = future.result()
-                ner_results_list.append(result)
-                # Update metrics based on the metadata from the result
-                metadata = result.metadata
-                total_prompt_tokens += metadata.get('prompt_tokens', 0)
-                total_completion_tokens += metadata.get('completion_tokens', 0)
-                if metadata.get('cache_hit'):
-                    num_cache_hit += 1
-
-                pbar.set_postfix({
-                    'total_prompt_tokens': total_prompt_tokens,
-                    'total_completion_tokens': total_completion_tokens,
-                    'num_cache_hit': num_cache_hit
-                })
+        # Skip NER entirely: synthesize empty NER results for compatibility
+        ner_results_list: List[NerRawOutput] = [
+            NerRawOutput(
+                chunk_id=chunk_key,
+                response="",
+                unique_entities=[],
+                metadata={}
+            )
+            for chunk_key in chunk_passages.keys()
+        ]
 
         triple_results_list = []
         total_prompt_tokens, total_completion_tokens, num_cache_hit = 0, 0, 0
@@ -185,11 +173,11 @@ class OpenIE:
             re_futures = {
                 executor.submit(self.triple_extraction, ner_result.chunk_id,
                                 chunk_passages[ner_result.chunk_id],
-                                ner_result.unique_entities): ner_result.chunk_id
+                                []): ner_result.chunk_id
                 for ner_result in ner_results_list
             }
             # Collect triple extraction results with progress bar
-            pbar = tqdm(as_completed(re_futures), total=len(re_futures), desc="Extracting triples")
+            pbar = tqdm(as_completed(re_futures), total=len(re_futures), desc="Extracting triples", disable=(len(re_futures) <= 1), mininterval=0.5)
             for future in pbar:
                 result = future.result()
                 triple_results_list.append(result)

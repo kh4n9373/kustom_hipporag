@@ -177,13 +177,23 @@ class CacheOpenAI(BaseLLM):
         if kwargs:
             params.update(kwargs)
         params["messages"] = messages
-        logger.debug(f"Calling OpenAI GPT API with:\n{params}")
+        # Provider-specific extras (e.g., vLLM disable thoughts)
+        extra_body = params.get("extra_body") or {}
+        if getattr(self.global_config, "disable_thinking", False):
+            extra_body["disable_thoughts"] = True
+        if extra_body:
+            params["extra_body"] = extra_body
+        # Only log errors later; avoid noisy successful calls
 
         if 'gpt' not in params['model'] or version.parse(openai.__version__) < version.parse("1.45.0"): # if we use vllm to call openai api or if we use openai but the version is too old to use 'max_completion_tokens' argument
             # TODO strange version change in openai protocol, but our current vllm version not changed yet
             params['max_tokens'] = params.pop('max_completion_tokens')
 
-        response = self.openai_client.chat.completions.create(**params)
+        try:
+            response = self.openai_client.chat.completions.create(**params)
+        except Exception as e:
+            logger.warning(f"LLM call failed: {e}")
+            raise
 
         response_message = response.choices[0].message.content
         assert isinstance(response_message, str), "response_message should be a string"

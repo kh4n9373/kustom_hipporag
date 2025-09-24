@@ -55,6 +55,10 @@ class BaseConfig:
         default_factory=lambda: { "type": "json_object" },
         metadata={"help": "Specifying the format that the model must output."}
     )
+    disable_thinking: bool = field(
+        default=False,
+        metadata={"help": "If True, pass provider-specific flag to disable thoughts (e.g., vLLM extra_body.disable_thoughts)."}
+    )
     
     ## LLM specific attributes -> Async hyperparameters
     max_retry_attempts: int = field(

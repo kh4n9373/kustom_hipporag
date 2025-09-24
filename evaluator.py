@@ -556,3 +556,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""
+python3 /home/hungpv/projects/kustom_hipporag/evaluator.py \
+    --input /home/hungpv/projects/kustom_hipporag/locomo_eval_output.json \
+    --ks 3,5,10,ALL \
+    --precision-mode ir \
+    --out-dir /home/hungpv/projects/kustom_hipporag/eval_results 
+
+python3 /home/hungpv/projects/kustom_hipporag/evaluator.py \
+    --input /home/hungpv/projects/kustom_hipporag/locomo_eval_output_secom.json \
+    --ks 3,5,10,ALL \
+    --precision-mode ir \
+    --out-dir /home/hungpv/projects/kustom_hipporag/eval_results 
+"""

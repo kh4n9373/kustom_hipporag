@@ -1,0 +1,8 @@
+sentence-transformers
+omegaconf
+vllm
+openai
+langchain-community
+langchain-core
+faiss-gpu
+rank_bm25

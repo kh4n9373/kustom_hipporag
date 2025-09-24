@@ -5,7 +5,6 @@ from ..utils.config_utils import BaseConfig
 
 from .openai_gpt import CacheOpenAI
 from .base import BaseLLM
-from .bedrock_llm import BedrockLLM
 from .transformers_llm import TransformersLLM
 
 
@@ -17,6 +16,8 @@ def _get_llm_class(config: BaseConfig):
         os.environ['OPENAI_API_KEY'] = 'sk-'
 
     if config.llm_name.startswith('bedrock'):
+        # Lazy import to avoid requiring optional dependency 'litellm' unless used
+        from .bedrock_llm import BedrockLLM
         return BedrockLLM(config)
     
     if config.llm_name.startswith('Transformers/'):
