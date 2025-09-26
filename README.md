@@ -78,7 +78,7 @@ docs = [
 ]
 
 save_dir = 'outputs'# Define save directory for HippoRAG objects (each LLM/Embedding model combination will create a new subdirectory)
-llm_model_name = 'gpt-4o-mini' # Any OpenAI model name
+llm_model_name = 'Qwen/Qwen3-8B' # Any OpenAI-compatible model name
 embedding_model_name = 'nvidia/NV-Embed-v2'# Embedding model name (NV-Embed, GritLM or Contriever for now)
 
 #Startup a HippoRAG instance
@@ -215,7 +215,7 @@ To use our code to run experiments we recommend you clone this repository and fo
 ### Data for Reproducibility
 
 We evaluated several sampled datasets in our paper, some of which are already included in the `reproduce/dataset` directory of this repo. For the complete set of datasets, please visit
-our [HuggingFace dataset](https://huggingface.co/datasets/osunlp/HippoRAG_v2) and place them under `reproduce/dataset`. We also provide the OpenIE results for both `gpt-4o-mini` and `Llama-3.3-70B-Instruct` for our `musique` sample under `outputs/musique`.
+our [HuggingFace dataset](https://huggingface.co/datasets/osunlp/HippoRAG_v2) and place them under `reproduce/dataset`. We also provide the OpenIE results for both `Qwen/Qwen3-8B` and `Llama-3.3-70B-Instruct` for our `musique` sample under `outputs/musique`.
 
 To test your environment is properly set up, you can use the small dataset `reproduce/dataset/sample.json` for debugging as shown below.
 
@@ -237,7 +237,7 @@ conda activate hipporag
 dataset=sample  # or any other dataset under `reproduce/dataset`
 
 # Run OpenAI model
-python main.py --dataset $dataset --llm_base_url https://api.openai.com/v1 --llm_name gpt-4o-mini --embedding_name nvidia/NV-Embed-v2
+python main.py --dataset $dataset --llm_base_url https://api.openai.com/v1 --llm_name Qwen/Qwen3-8B --embedding_name nvidia/NV-Embed-v2
 ```
 
 ### Run with vLLM (Llama)

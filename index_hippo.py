@@ -129,7 +129,7 @@ def main():
         (args.llm_name if isinstance(args.llm_name, str) and args.llm_name.strip() else None)
         or (args.model if isinstance(args.model, str) and args.model.strip() else None)
         or os.environ.get("LLM_NAME")
-        or "gpt-4o-mini"
+        or "Qwen/Qwen3-8B"
     )
 
     # Minimal config; we'll use only DPR paths, so OpenIE/graph are not required

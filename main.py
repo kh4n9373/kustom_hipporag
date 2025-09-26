@@ -70,7 +70,7 @@ def main():
     parser = argparse.ArgumentParser(description="HippoRAG retrieval and QA")
     parser.add_argument('--dataset', type=str, default='musique', help='Dataset name')
     parser.add_argument('--llm_base_url', type=str, default='https://api.openai.com/v1', help='LLM base URL')
-    parser.add_argument('--llm_name', type=str, default='gpt-4o-mini', help='LLM name')
+    parser.add_argument('--llm_name', type=str, default='Qwen/Qwen3-8B', help='LLM name')
     parser.add_argument('--embedding_name', type=str, default='nvidia/NV-Embed-v2', help='embedding model name')
     parser.add_argument('--force_index_from_scratch', type=str, default='false',
                         help='If set to True, will ignore all existing storage files and graph data and will rebuild from scratch.')

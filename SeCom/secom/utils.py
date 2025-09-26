@@ -12,16 +12,25 @@ from vllm import LLM, SamplingParams
 
 
 class OpenAILLM:
-    def __init__(self, model_name="gpt-4o-mini-2024-07-18"):
+    def __init__(self, model_name="Qwen/Qwen3-8B"):
         from openai import OpenAI
 
         self.model_name = model_name
         load_dotenv(osp.expanduser("~/dot_env/openai.env"))
 
+        # Prefer environment variables so callers can configure endpoint and key
+        base_url = os.getenv("OPENAI_BASE_URL", "https://openrouter.ai/api/v1")
+        # Accept multiple possible env names; pick the first non-empty
+        api_key = (
+            os.getenv("OPENAI_API_KEY")
+            or os.getenv("OPENROUTER_API_KEY")
+            or os.getenv("OPENAI_API_KEYS")
+            or "sk-"
+        )
+
         self.client = OpenAI()
-        self.client.base_url = "https://openrouter.ai/api/v1"
-        keys = "sk-"
-        self.client.api_key = keys.split(",")[0]
+        self.client.base_url = base_url
+        self.client.api_key = api_key.split(",")[0]
 
     def __call__(
         self,

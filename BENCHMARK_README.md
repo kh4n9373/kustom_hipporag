@@ -68,7 +68,7 @@ python3 index_hippo.py \
   --out /path/to/output.json \
   --save-dir outputs/run1 \
   --llm-base-url https://openrouter.ai/api/v1 \
-  --llm-name gpt-4o-mini \
+  --llm-name Qwen/Qwen3-8B \
   --embedding-name BAAI/bge-m3 \
   --api-key $OPENAI_API_KEY \
   --top-k 10
@@ -78,7 +78,7 @@ Supported flags:
 - --input: path to dataset JSON (required)
 - --out: output JSON path (required)
 - --save-dir: cache directory for HippoRAG storages (default: outputs/locomo)
-- --llm-name: LLM name; also accepts -m/--model and env LLM_NAME; default gpt-4o-mini
+- --llm-name: LLM name; also accepts -m/--model and env LLM_NAME; default Qwen/Qwen3-8B
 - -m, --model: alias for --llm-name
 - --llm-base-url: OpenAI-compatible base URL (default: https://openrouter.ai/api/v1)
 - --embedding-name: embedding model (default: BAAI/bge-m3)

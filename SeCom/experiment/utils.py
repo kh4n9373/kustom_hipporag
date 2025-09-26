@@ -12,7 +12,7 @@ from vllm import LLM, SamplingParams
 
 
 class OpenAILLM:
-    def __init__(self, model_name="gpt-4o-mini-2024-07-18"):
+    def __init__(self, model_name="Qwen/Qwen3-8B"):
         from openai import OpenAI
 
         self.model_name = model_name

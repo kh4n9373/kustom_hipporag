@@ -26,3 +26,4 @@ locomo_*
 eval_results
 outputs
 secom_*
+docker-compose.yml

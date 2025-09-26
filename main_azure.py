@@ -73,7 +73,7 @@ def main():
     parser = argparse.ArgumentParser(description="HippoRAG retrieval and QA")
     parser.add_argument('--dataset', type=str, default='musique', help='Dataset name')
     parser.add_argument('--llm_base_url', type=str, default='https://api.openai.com/v1', help='LLM base URL')
-    parser.add_argument('--llm_name', type=str, default='gpt-4o-mini', help='LLM name')
+    parser.add_argument('--llm_name', type=str, default='Qwen/Qwen3-8B', help='LLM name')
     parser.add_argument('--embedding_name', type=str, default='text-embedding-3-small', help='embedding model name')
     parser.add_argument('--azure_endpoint', type=str, default=None, help='Azure Endpoint URL')
     parser.add_argument('--azure_embedding_endpoint', type=str, default=None, help='Azure Embedding Endpoint')

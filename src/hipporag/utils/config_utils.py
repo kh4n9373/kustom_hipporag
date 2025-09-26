@@ -16,7 +16,7 @@ class BaseConfig:
     """One and only configuration."""
     # LLM specific attributes 
     llm_name: str = field(
-        default="gpt-4o-mini",
+        default="Qwen/Qwen3-8B",
         metadata={"help": "Class name indicating which LLM model to use."}
     )
     llm_base_url: str = field(

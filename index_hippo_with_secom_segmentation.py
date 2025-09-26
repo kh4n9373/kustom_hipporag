@@ -270,7 +270,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--input", required=True, help="Path to input dataset JSON (e.g., locomo_session_all.json)")
     p.add_argument("--out", required=True, help="Path to output JSON to save retrieval results")
     p.add_argument("--save-dir", default="outputs/locomo", help="HippoRAG save_dir (embeddings/graph cache)")
-    p.add_argument("--llm-name", default="gpt-4o-mini")
+    p.add_argument("--llm-name", default="Qwen/Qwen3-8B")
     p.add_argument("--embedding-name", default="BAAI/bge-m3")
     p.add_argument("--llm-base-url", default="https://openrouter.ai/api/v1")
     p.add_argument("--api-key", default=None, help="API key for LLM provider (exported to OPENAI_API_KEY)")
@@ -305,6 +305,9 @@ def main():
         os.environ["OPENAI_API_KEY"] = args.api_key
     if args.embedding_api_key:
         os.environ.setdefault("OPENAI_API_KEY", args.embedding_api_key)
+    # Ensure OpenAI-compatible clients (e.g., SeCom) see the base URL
+    if args.llm_base_url:
+        os.environ["OPENAI_BASE_URL"] = str(args.llm_base_url)
 
     original_chunks = collect_original_chunks(dataset)
 
@@ -458,15 +461,15 @@ if __name__ == "__main__":
 
 
 """
-python3 /home/hungpv/projects/kustom_hipporag/prepare_locomo_eval_secom.py \
+python3 /home/hungpv/projects/kustom_hipporag/index_hippo_with_secom_segmentation.py \
   --input /home/hungpv/projects/kustom_hipporag/locomo_session_all.json \
   --out /home/hungpv/projects/kustom_hipporag/locomo_eval_output_secom.json \
   --save-dir outputs/locomo_secom_v1 \
-  --llm-base-url http://localhost:8002/v1 \
+  --llm-base-url http://localhost:8001/v1 \
   --llm-name Qwen/Qwen3-8B \
   --disable-thinking \
   --embedding-name BAAI/bge-m3 \
-  --api-key sk- \
+  --api-key sk-local \
   --top-k 10 \
   --pool-factor 10 \
   --agg sum \
